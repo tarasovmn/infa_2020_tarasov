@@ -10,17 +10,16 @@ grey = (220, 220, 220)
 black = (0, 0, 0)
 
 # Создаём экран
-screen = pygame.display.set_mode((400, 800))
+screen = pygame.display.set_mode((600, 800))
 screen.fill(white)
 
 polygon(screen, grey, ((0, 0), (0, 400), (400, 400), (400, 0)))
 polygon(screen, white, ((0, 400), (400, 400), (800, 800), (0, 800)))
 
 # Происходит рисование хаты
-ellipse(screen, (194, 194, 194), (50, 350, 200, 150), 0)
-ellipse(screen, black, (50, 350, 200, 150), 1)
+ellipse(screen, black, (50, 350, 200, 150), 2)
 polygon(screen, (255, 250, 250), ((0, 450), (400, 450), (800, 800), (0, 800)))
-line(screen, black, (55, 450), (245, 448))
+lines(screen, black, False, ((55, 450), (60, 455), (250, 443)))
 line(screen, black, (50, 425), (245, 425))
 line(screen, black, (58, 400), (242, 400))
 line(screen, black, (75, 375), (225, 375))
