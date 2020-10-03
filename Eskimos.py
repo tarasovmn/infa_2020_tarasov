@@ -1,89 +1,93 @@
 import pygame
 from pygame.draw import *
+import math
 
-pygame.init()
-FPS = 60
-
-# Цвета
+# Цвета:
 white = (255, 255, 255)
-grey = (220, 220, 220)
+grey = (199, 199, 199)
 black = (0, 0, 0)
 
-# Создаём экран
-screen = pygame.display.set_mode((600, 800))
-screen.fill(white)
+FPS = 30
+# Создаём окно рисования
+win_width = 600
+win_length = 800
+screen = pygame.display.set_mode((win_width, win_length))
 
-polygon(screen, grey, ((0, 0), (0, 400), (400, 400), (400, 0)))
-polygon(screen, white, ((0, 400), (400, 400), (800, 800), (0, 800)))
 
-# Происходит рисование хаты
-ellipse(screen, black, (50, 350, 200, 150), 2)
-polygon(screen, (255, 250, 250), ((0, 450), (400, 450), (800, 800), (0, 800)))
-lines(screen, black, False, ((55, 450), (60, 455), (250, 443)))
-line(screen, black, (50, 425), (245, 425))
-line(screen, black, (58, 400), (242, 400))
-line(screen, black, (75, 375), (225, 375))
-line(screen, black, (100, 360), (103, 375))
-line(screen, black, (135, 355), (134, 375))
-line(screen, black, (173, 355), (174, 375))
-line(screen, black, (80, 375), (81, 400))
-line(screen, black, (120, 375), (119, 400))
-line(screen, black, (160, 375), (161, 400))
-line(screen, black, (190, 375), (188, 400))
-line(screen, black, (75, 400), (72, 425))
-line(screen, black, (125, 400), (130, 425))
-line(screen, black, (155, 400), (156, 425))
-line(screen, black, (195, 400), (196, 425))
-line(screen, black, (65, 425), (66, 455))
-line(screen, black, (100, 425), (101, 454))
-line(screen, black, (145, 425), (146, 450))
-line(screen, black, (190, 425), (189, 447))
-line(screen, black, (220, 425), (221, 444))
+def background():
+    """ Функция рисует задний фон
+    """
+    rect(screen, grey, (0, 0, win_width, int(0.4 * win_length)))
+    rect(screen, white, [0, int(0.4 * win_length), win_width, int(0.6 * win_length)])
 
-ellipse(screen, (240, 240, 240), (290, 420, 60, 45))
-ellipse(screen, (160, 80, 50), (275, 440, 90, 180))
-polygon(screen, (255, 250, 250), ((0, 530), (400, 530), (800, 800), (0, 800)))
-ellipse(screen, (170, 100, 60), (295, 425, 50, 35))
-ellipse(screen, (240, 230, 140), (300, 430, 40, 30))
-ellipse(screen, (160, 80, 50), (290, 515, 20, 40))
-ellipse(screen, (160, 80, 50), (330, 515, 20, 40))
-ellipse(screen, (160, 80, 50), (330, 540, 35, 15))
-ellipse(screen, (160, 80, 50), (270, 540, 35, 15))
-ellipse(screen, (0, 0, 0), (270, 548, 35, 8))
-ellipse(screen, (0, 0, 0), (330, 548, 35, 8))
-ellipse(screen, (160, 80, 50), (260, 467, 40, 15))
-polygon(screen, (140, 70, 20), ((310, 460), (330, 460), (330, 525), (310, 525)))
-polygon(screen, (140, 70, 20), ((275, 520), (360, 520), (360, 535), (280, 535)))
-circle(screen, (0, 0, 0), (320, 485), 4)
-circle(screen, (0, 0, 0), (320, 500), 4)
-circle(screen, (0, 0, 0), (320, 515), 4)
-line(screen, (0, 0, 0), (265, 450), (270, 530), 2)
-line(screen, (0, 0, 0), (315, 440), (315, 442), 2)
-line(screen, (0, 0, 0), (327, 440), (327, 442), 2)
-line(screen, (0, 0, 0), (317, 450), (325, 452), 2)
-line(screen, (0, 0, 0), (325, 457), (326, 470), 2)
-line(screen, (0, 0, 0), (323, 457), (324, 470), 2)
-line(screen, (0, 0, 0), (324, 456), (324, 471), 2)
-line(screen, (0, 0, 0), (328, 457), (329, 468), 2)
-line(screen, (0, 0, 0), (317, 458), (317, 471), 2)
-line(screen, (0, 0, 0), (320, 457), (319, 470), 2)
-line(screen, (0, 0, 0), (315, 457), (314, 470), 2)
 
-ellipse(screen, (192, 192, 192), (100, 600, 80, 30))
-ellipse(screen, (192, 192, 192), (90, 585, 30, 20))
-ellipse(screen, (192, 192, 192), (100, 590, 18, 20))
-ellipse(screen, (255, 255, 255), (95, 587, 5, 3))
-ellipse(screen, (255, 255, 255), (100, 587, 5, 3))
-ellipse(screen, (0, 0, 0), (96, 588, 3, 2))
-ellipse(screen, (0, 0, 0), (101, 588, 3, 2))
-polygon(screen, (192, 192, 192), ((95, 586), (98, 582), (101, 586)))
-polygon(screen, (192, 192, 192), ((105, 586), (108, 580), (111, 586)))
+def house(x, y, width, length):
+    ''' Функция рисует домик ширины width и высоты length от опорной точки(x,y),
+    которая находится в середине основания домика.
+    :param x: Координата х середины основания домика
+    :param y: Координата у середины основания домика
+    :param width: Ширина домика
+    :param length: Высота домика
+    :return: None
+    '''
+    draw_house_walls(x, y, width, length)
+    draw_house_lines(x, y, width, length)
 
-circle(screen, (255, 250, 250), (300, 700), 20)
-circle(screen, (255, 250, 250), (320, 700), 20)
-circle(screen, (255, 250, 250), (310, 690), 20)
 
-# The end
+def draw_house_walls(x, y, width, length):
+    '''
+    Функция рисует основную стену и основание домика
+    :param x: Координата х середины основания домика
+    :param y: Координата у середины основания домика
+    :param width: Ширина домика
+    :param length: Высота домика
+    :return: None
+    '''
+    arc(screen, black, (x - int(0.5 * width), y - length, width, int(2 * length)), 0, math.pi, 3)
+    line(screen, black, [x - int(0.5 * width), y], [x + int(0.5 * width), y], 2)
+
+
+def draw_house_lines(x, y, width, length):
+    ''' Функция рисует линии у дома
+    '''
+    # Горизонталғные линии
+    line(screen, black, [x - int(7 * width / 15), y - int(2 * length / 7)],
+         [x + int(7 * width / 15), y - int(2 * length / 7)])
+    line(screen, black, [x - int(6 * width / 15), y - int(4 * length / 7)],
+         [x + int(6 * width / 15), y - int(4 * length / 7)])
+    line(screen, black, [x - int(4 * width / 15), y - int(6 * length / 7)],
+         [x + int(4 * width / 15), y - int(6 * length / 7)])
+    # Вертикальные линии
+    line(screen, black, [x, y - length], [x - 10, y - int(6 * length / 7)])
+
+    line(screen, black, [x - int(0.33 * width/2), y - int(6 * length / 7)],
+         [x - int(0.40 * width/2), y - int(4 * length / 7)])
+    line(screen, black, [x, y - int(6 * length / 7)], [x + int(0.02 * width/2), y - int(4 * length / 7)])
+    line(screen, black, [x + int(0.33*width/2), y - int(6 * length / 7)], [x + int(0.45*width/2), y - int(4 * length / 7)])
+
+    line(screen, black, [x - int(width / 4), y - int(4 * length / 7)],
+         [x - int(1.11 * width / 4), y - int(2 * length / 7)])
+    line(screen, black, [x - int(width / 12), y - int(4 * length / 7)],
+         [x - int(1.06 * width / 12), y - int(2 * length / 7)])
+    line(screen, black, [x + int(width / 12), y - int(4 * length / 7)],
+         [x + int(1.10 * width / 12), y - int(2 * length / 7)])
+    line(screen, black, [x + int(width / 4), y - int(4 * length / 7)],
+         [x + int(1.20 * width / 4), y - int(2 * length / 7)])
+
+    line(screen, black, [x - int(3*width/8), y - int(2 * length / 7)], [x - int(3.1*width/8), y])
+    line(screen, black, [x - int(3*width/16), y - int(2 * length / 7)], [x - int(3.19*width/16) , y])
+    line(screen, black, [x + int(3*width/16), y - int(2 * length / 7)], [x + int(3.12*width/16), y])
+    line(screen, black, [x, y - int(2 * length / 7)], [x - int(0.01*width), y])
+    line(screen, black, [x + int(3*width/8), y - int(2 * length / 7)], [x + int(3.15*width/8), y])
+
+
+
+background()
+
+house(400, 200, 300, 150)
+house(200, 500, 150, 75)
+
+# Конец
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
