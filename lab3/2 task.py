@@ -2,40 +2,44 @@ import pygame
 from pygame.draw import *
 
 pygame.init()
-FPS = 30
+FPS = 60
 
+# Цвета
+white = (255, 255, 255)
+grey = (220, 220, 220)
+black = (0, 0, 0)
+
+# Создаём экран
 screen = pygame.display.set_mode((400, 800))
-polygon(screen, (245, 240, 240), ((0, 0), (0, 400), (400, 400), (400, 0)))
-polygon(screen, (255, 250, 250), ((0, 400), (400, 400), (800, 800), (0, 800)))
+screen.fill(white)
 
-ellipse(screen, ((135, 206, 235)), (50, 200, 100, 50))
-circle(screen, (135, 206, 235), (60, 210), 20)
-circle(screen, (135, 206, 235), (85, 200), 15)
-circle(screen, (135, 206, 235), (110, 235), 25)
-circle(screen, (135, 206, 235), (140, 210), 20)
+polygon(screen, grey, ((0, 0), (0, 400), (400, 400), (400, 0)))
+polygon(screen, white, ((0, 400), (400, 400), (800, 800), (0, 800)))
 
-ellipse(screen, ((0, 0, 0)), (50, 350, 200, 150), 2)
+# Происходит рисование хаты
+ellipse(screen, (194, 194, 194), (50, 350, 200, 150), 0)
+ellipse(screen, black, (50, 350, 200, 150), 1)
 polygon(screen, (255, 250, 250), ((0, 450), (400, 450), (800, 800), (0, 800)))
-lines(screen, (0, 0, 0), False, ((55, 450), (60, 455), (250, 443)))
-line(screen, (0, 0, 0), (50, 425), (245, 425))
-line(screen, (0, 0, 0), (58, 400), (242, 400))
-line(screen, (0, 0, 0), (75, 375), (225, 375))
-line(screen, (0, 0, 0), (100, 360), (103, 375))
-line(screen, (0, 0, 0), (135, 355), (134, 375))
-line(screen, (0, 0, 0), (173, 355), (174, 375))
-line(screen, (0, 0, 0), (80, 375), (81, 400))
-line(screen, (0, 0, 0), (120, 375), (119, 400))
-line(screen, (0, 0, 0), (160, 375), (161, 400))
-line(screen, (0, 0, 0), (190, 375), (188, 400))
-line(screen, (0, 0, 0), (75, 400), (72, 425))
-line(screen, (0, 0, 0), (125, 400), (130, 425))
-line(screen, (0, 0, 0), (155, 400), (156, 425))
-line(screen, (0, 0, 0), (195, 400), (196, 425))
-line(screen, (0, 0, 0), (65, 425), (66, 455))
-line(screen, (0, 0, 0), (100, 425), (101, 454))
-line(screen, (0, 0, 0), (145, 425), (146, 450))
-line(screen, (0, 0, 0), (190, 425), (189, 447))
-line(screen, (0, 0, 0), (220, 425), (221, 444))
+line(screen, black, (55, 450), (245, 448))
+line(screen, black, (50, 425), (245, 425))
+line(screen, black, (58, 400), (242, 400))
+line(screen, black, (75, 375), (225, 375))
+line(screen, black, (100, 360), (103, 375))
+line(screen, black, (135, 355), (134, 375))
+line(screen, black, (173, 355), (174, 375))
+line(screen, black, (80, 375), (81, 400))
+line(screen, black, (120, 375), (119, 400))
+line(screen, black, (160, 375), (161, 400))
+line(screen, black, (190, 375), (188, 400))
+line(screen, black, (75, 400), (72, 425))
+line(screen, black, (125, 400), (130, 425))
+line(screen, black, (155, 400), (156, 425))
+line(screen, black, (195, 400), (196, 425))
+line(screen, black, (65, 425), (66, 455))
+line(screen, black, (100, 425), (101, 454))
+line(screen, black, (145, 425), (146, 450))
+line(screen, black, (190, 425), (189, 447))
+line(screen, black, (220, 425), (221, 444))
 
 ellipse(screen, (240, 240, 240), (290, 420, 60, 45))
 ellipse(screen, (160, 80, 50), (275, 440, 90, 180))
@@ -80,6 +84,7 @@ circle(screen, (255, 250, 250), (300, 700), 20)
 circle(screen, (255, 250, 250), (320, 700), 20)
 circle(screen, (255, 250, 250), (310, 690), 20)
 
+# The end
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
