@@ -220,8 +220,7 @@ def draw_men_legs(x, y, men_width, men_height):
             (x + int(men_width / 13), y - men_height + int(0.87 * men_width), int(1.5 * men_height / 8),
              int(1 * men_width / 11)), 0)
     rect(screen, (71, 53, 16), (
-        x - int(men_width / 3.65), y - men_height + int(0.76 * men_width), int(9.3 * men_width / 17),
-        int(men_width / 15)))
+    x - int(men_width / 3.65), y - men_height + int(0.76 * men_width), int(9.3 * men_width / 17), int(men_width / 15)))
 
 
 def draw_men_hands(x, y, men_width, men_height):
@@ -240,7 +239,7 @@ def draw_men_hands(x, y, men_width, men_height):
 
     surface = pygame.Surface((int(5.5 * men_width / 17), int(1.1 * men_width / 11)))
     surface.fill((255, 255, 255, 0))
-    surface.set_alpha(0)
+    surface.set_alpha(255)
     ellipse(surface, (102, 80, 37), (
         0, 0, int(5.5 * men_width / 17),
         int(1.1 * men_width / 11)))
@@ -252,7 +251,7 @@ def draw_men_hands(x, y, men_width, men_height):
 draw_background()
 draw_house(100, 320, 200, 150)
 draw_men(420, 620, 200, 210)
-draw_men(220, 420, 300, 210 * 1.5)
+draw_men(220, 520, 300, 315)
 # Конец
 pygame.display.update()
 clock = pygame.time.Clock()
