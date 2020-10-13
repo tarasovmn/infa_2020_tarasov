@@ -24,12 +24,10 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 # this function draws new ball of random size and color in random place on the screen
 def new_ball():
-    global x, y, r
+    global x, y, r, speed_x, speed_y
     x = randint(100, 900)
     y = randint(100, 500)
     r = randint(10, 100)
-    speed_x = randint(-10, 10)
-    speed_y = randint(-10, 10)
     color = COLORS[randint(0, 5)]
     circle(screen, color, (x, y), r)
 
@@ -45,15 +43,10 @@ finished = False
 while not finished:
     clock.tick(FPS)
     for event in pygame.event.get():
-        for i in range(10):
-            circle(screen, (0, 0, 0), (x, y), r)
-            x = x + speed_x
-            y = y + speed_y
         if event.type == pygame.QUIT:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             cursor_x, cursor_y = event.pos
-            pygame.display.update()
             if (abs(x - cursor_x)) ** 2 + (abs(y - cursor_y)) ** 2 <= r ** 2:
                 print('Click!')
                 score += 1
