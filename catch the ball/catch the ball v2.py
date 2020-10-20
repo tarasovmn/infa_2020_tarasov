@@ -6,9 +6,7 @@ from random import randint
 # initialise game engine
 pygame.init()
 
-score = 0
-FPS = 1
-pygame.display.set_caption("Catch the ball")
+c
 screen = pygame.display.set_mode((1000, 600))
 
 # colors in RGB
@@ -24,16 +22,18 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 # this function draws new ball of random size and color in random place on the screen
 def new_ball():
-    global x, y, r, speed_x, speed_y
-    x = randint(100, 900)
-    y = randint(100, 500)
+    global x, y, r, speed_x, speed_y, color
     r = randint(10, 100)
+    ball = randint(r, 1000-r)
+    y = randint(r, 600-r)
+    speed_x = randint(-10, 10)
+    speed_y = randint(-6, 6)
     color = COLORS[randint(0, 5)]
     circle(screen, color, (x, y), r)
 
-
-def click(event):
-    print(x, y)
+def plus():
+    a = randint(50, 100)
+    polygon(screen, color, (()))
 
 
 # pygame.display.update()
@@ -42,6 +42,19 @@ finished = False
 
 while not finished:
     clock.tick(FPS)
+    new_ball()
+    for i in range(10):
+        circle(screen, (0, 0, 0), (x, y), r)
+        if 0<= x + speed_x <= 1000:
+            x = x + speed_x
+        else:
+            x = x - speed_x
+        if 0 <= y + speed_y <= 600:
+            y = y + speed_y
+        else:
+            y = y - speed_y
+        circle(screen, color, (x, y), r)
+        pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
@@ -55,8 +68,8 @@ while not finished:
                 break
             else:
                 screen.fill(BLACK)
-            pygame.display.update()
-    new_ball()
+                break
+    # new_ball()
     pygame.display.update()
 
 pygame.quit()

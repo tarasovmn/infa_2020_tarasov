@@ -1,107 +1,104 @@
 import pygame
-import pygame.draw as d
-import random as rnd
-
-# Сделай дома через ооп
+from pygame.draw import *
+from random import randint
 
 pygame.init()
 
-FPS = 25
-screen_width = 1100
-screen_height = 700
-screen = pygame.display.set_mode((screen_width, screen_height))
-max_ball_r = 75
-velocity_max = 10
-
+#  Цвета:
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
-COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
-counter = 0
+COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
+
+# Задаём последовательность праметров для шара.
+X = 0
+Y = 1
+R = 2
+COLOR = 3
+VX = 4
+VY = 5
+
+# Экран:
+WIDTH = 1200
+HEIGHT = 500
+FPS = 30
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Начальные условия
+score = 0
+number = 7  # Колличесво шаров
+balls = [0] * number
 
 
-class Ball(object):
+def text(score):
+    """ Функция выводит счёт на экран
+    score - счёт, который будет отображаться на экране
     """
-    Ball object for "screen" plane. Can be moved and deleted
-    """
-
-    def __init__(self, r):
-        max_r = r
-        self.x = rnd.randint(max_r, screen_width - max_r)
-        self.y = rnd.randint(max_r, screen_height - max_r)
-        self.r = rnd.randint(15, max_r)
-        self.color = COLORS[rnd.randint(0, 5)]
-        self.v_x = rnd.randint(-velocity_max, velocity_max)
-        self.v_y = rnd.randint(-velocity_max, velocity_max)
-
-    def new_ball(self):
-        """
-        Creates a new Ball
-        :return: an image on "screen" plane
-        """
-        d.circle(screen, self.color, (self.x, self.y), self.r)
-
-    def ball_movement(self):
-        """
-        Defines Ball movement
-        :return: an image on "screen" plane
-        """
-        if self.x > (screen_width - self.r):
-            self.v_x = rnd.randint(-velocity_max, 0)
-        elif self.x < self.r:
-            self.v_x = rnd.randint(0, velocity_max)
-        elif self.y < self.r:
-            self.v_y = rnd.randint(0, velocity_max)
-        elif self.y > (screen_height - self.r):
-            self.v_y = rnd.randint(-velocity_max, 0)
-        self.x = self.x + self.v_x
-        self.y = self.y + self.v_y
-        d.circle(screen, self.color, (self.x, self.y), self.r)
-
-    def ball_cords(self, cords: tuple):
-        """
-        Compares ball cords to given cords
-        :return: bool type
-        """
-        if ((cords[0] - self.x)**2 + (cords[1] - self.y)**2) <= self.r**2:
-            return True
-        else:
-            return False
-
-    def ball_exterminate(self):
-        self.x, self.y = 2000, 2000
+    f1 = pygame.font.SysFont('arial', 55)
+    text = f1.render(score, 1, WHITE)
+    screen.blit(text, (60, 20))
 
 
-class Star(object):
-    """
-    Should've been ball subclass, bit it's too late to change and is out of my skill range
-    """
-    def __init__(self, r):
-        max_r = r
-        self.x = rnd.randint(max_r, screen_width - max_r)
-        self.y = rnd.randint(max_r, screen_height - max_r)
-        self.r = rnd.randint(15, max_r)
-        self.color = COLORS[rnd.randint(0, 5)]
-        self.v_x = rnd.randint(-velocity_max, velocity_max)
-        self.v_y = rnd.randint(-velocity_max, velocity_max)
-
-    def new_ball(self):
-        """
-        Creates a new Star
-        :return: an image on "screen" plane
-        """
-        d.polygon(screen, self.color, (self.x, self.y))
+def draw(ball) -> object:
+    """ Функция рисует шарик """
+    circle(screen, ball[COLOR], (ball[X], ball[Y]), ball[R])
 
 
-circle_1 = Ball(max_ball_r)
-circle_2 = Ball(max_ball_r)
-obj_3 = Ball(max_ball_r)
-restart = 0
-player_score = 0
+def new_ball():
+    """ Функция рисует новый шарик """
+    x = randint(10, WIDTH - 80)  # Рандомная координата шара по x
+    y = randint(10, HEIGHT - 80)  # Рандомная координата шара по y
+    vx = randint(-6, 6)  # Рандомная скорость шара vx
+    vy = randint(-6, 6)  # Рандомная скорость vy
+    r = randint(30, 80)  # Рандомный радиус шара r
+    color = COLORS[randint(0, 6)]  # Рандомный цвет для шара
+    circle(screen, color, (x, y), r)
+    ball = [0] * 6
+    ball[X] = x
+    ball[Y] = y
+    ball[VX] = vx
+    ball[VY] = vy
+    ball[R] = r
+    ball[COLOR] = color
+    return ball
+
+
+def move_ball(ball):
+    """ Функция производит движение и отскоки шарика """
+    r = ball[R]
+    x = ball[X]
+    y = ball[Y]
+    vx = ball[VX]
+    vy = ball[VY]
+    x += vx
+    y += vy
+    if x + r > WIDTH or x - r < 0:  # Отскок по вертикали
+        vx = -vx
+        x += vx
+        y += vy
+    if y + r > HEIGHT or y - r < 0:  # Отскок по горизонтали
+        vy = -vy
+        x += vx
+        y += vy
+    else:
+        x += vx
+        y += vy
+
+    ball[X] = x
+    ball[Y] = y
+    ball[VX] = vx
+    ball[VY] = vy
+
+    return ball
+
+
+for i, ball in enumerate(balls):
+    balls[i] = new_ball()
 
 pygame.display.update()
 clock = pygame.time.Clock()
@@ -111,47 +108,24 @@ while not finished:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            print('FINAL SCORE:', player_score)
             finished = True
+            print("Всего очков:", score)
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if circle_1.ball_cords(pygame.mouse.get_pos()):
-                circle_1.ball_exterminate()
-                restart += 1
-                player_score += 1
-            if circle_2.ball_cords(pygame.mouse.get_pos()):
-                circle_2.ball_exterminate()
-                restart += 1
-                player_score += 1
-            if obj_3.ball_cords(pygame.mouse.get_pos()):
-                obj_3.ball_exterminate()
-                restart += 1
-                player_score += 1
-            if restart % 3 == 0:
-                if restart != 0:
-                    counter = 0
+            for i, ball in enumerate(balls):
+                x1, y1 = event.pos
+                x = ball[X]
+                y = ball[Y]
+                r = ball[R]
+                if (x - x1) ** 2 + (y - y1) ** 2 <= r ** 2:
+                    balls[i] = new_ball()
+                    score += 100 - r
+                    text(str(score))
 
-    if counter < 4*FPS and counter != 0:
-        screen.fill(BLACK)
-        circle_1.ball_movement()
-        circle_2.ball_movement()
-        obj_3.ball_movement()
-        counter += 1
-        screen.blit(text_score, (0, 0))
-        pygame.display.update()
-    else:
-        screen.fill(BLACK)
-        counter = 0
-        restart = 0
-        circle_1 = Ball(max_ball_r)
-        circle_2 = Ball(max_ball_r)
-        obj_3 = Ball(max_ball_r)
-        circle_1.new_ball()
-        counter = 1
-        player_score_str = str(player_score)
-        f1 = pygame.font.Font(None, 72)
-        text_score = f1.render(player_score_str, 0, RED)
-        screen.blit(text_score, (5, 5))
-        pygame.display.update()
+    for ball in balls:
+        ball = move_ball(ball)
+        draw(ball)
 
+    pygame.display.update()
+    screen.fill(BLACK)
 
 pygame.quit()
