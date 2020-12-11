@@ -122,6 +122,6 @@ while not finished:
         draw(ball)
 
     pygame.display.update()
-    screen.fill(BLACK)
+    screen.fill(BLACK)Pychar
 
 pygame.quit()
